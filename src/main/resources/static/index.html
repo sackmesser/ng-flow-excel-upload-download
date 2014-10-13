@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html ng-app="app" flow-init>
+<head>
+    <title>SPOOL-TAG Generator</title>
+    <script src="bower_components/jquery/jquery-2.1.1.min.js"></script>
+    <script src="bower_components/jquery/jQuery.fileDownload.js"></script>
+    <script src="bower_components/angular/angular.js"></script>
+    <script src="bower_components/ng-flow/dist/ng-flow-standalone.js"></script>
+    <script src="scripts/app.js"></script>
+    <script src="scripts/FileSaver.js"></script>
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/main.css">
+</head>
+<body flow-prevent-drop
+      flow-drag-enter="style={border: '5px solid green'}"
+      flow-drag-leave="style={}"
+      ng-style="style">
+
+<div class="container" class="ng-scope" ng-controller="AppController">
+    <h1>SPOOL-TAG Generator</h1>
+
+    <hr class="soften"/>
+
+    <div flow-init="{target: 'player/excel/upload'}" flow-files-submitted="$flow.upload()" flow-file-success="upload_success($flow, $file, $message)">
+        <div class="drop" flow-drop="" ng-class="dropClass">
+            <span class="btn btn-default" flow-btn="">Upload File<input type="file" multiple="multiple"
+                                                                        style="visibility: hidden; position: absolute;"></span>
+            <!--<span class="btn btn-default" flow-btn="" flow-directory=""-->
+                  <!--ng-show="$flow.supportDirectory">Upload Folder<input type="file" multiple="multiple"-->
+                                                                       <!--webkitdirectory="webkitdirectory"-->
+                                                                       <!--style="visibility: hidden; position: absolute;"></span>-->
+            <b>OR</b>
+            Drag and drop your file <here></here>
+        </div>
+        <br> <hr class="soften"/>
+
+        <!--<div class="well">-->
+        <!--<a class="btn btn-small btn-success" ng-click="$flow.resume()">Resume all</a>-->
+        <!--<a class="btn btn-small btn-danger" ng-click="$flow.pause()">Pause all</a>-->
+        <!--<a class="btn btn-small btn-info" ng-click="$flow.cancel()">Cancel all</a>-->
+        <!--<span class="label label-info ng-binding">Total Size: 0bytes</span>-->
+        <!--</div>-->
+
+        <div>
+            <!-- ngRepeat: file in $flow.files -->
+            <div ng-repeat="file in $flow.files" class="transfer-box ng-scope ng-binding">
+                {{file.name}}
+                <div class="progress progress-striped" ng-class="{active: file.isUploading()}">
+                    <div class="progress-bar" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" ng-style="{width: (file.progress() * 100) + '%'}" style="width: 100%;">
+                        <span class="sr-only ng-binding">1% Complete</span>
+                    </div>
+                </div>
+                <div class="btn-group">
+                    <a class="btn btn-xs btn-warning ng-hide" ng-click="file.pause()" ng-show="!file.paused &amp;&amp; file.isUploading()">
+                        Pause
+                    </a>
+                    <a class="btn btn-xs btn-warning ng-hide" ng-click="file.resume()" ng-show="file.paused">
+                        Resume
+                    </a>
+                    <a class="btn btn-xs btn-danger" ng-click="file.cancel()">
+                        Cancel
+                    </a>
+                    <a class="btn btn-xs btn-info ng-hide" ng-click="file.retry()" ng-show="file.error">
+                        Retry
+                    </a>
+                </div>
+            </div>
+            <div style="color:rgb(255, 0, 0);" ng-show="status=='ERROR'">
+                <p><b>Errors processing file </b></p>
+                <table>
+                    <thead>
+                    <tr>
+                        <th>File Row</th>
+                        <th>Error</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="error in errors">
+                        <td><b>{{ error.row }}</b></td>
+                        <td><b>{{ error.message }}</b></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div style="color:rgb(11,252,122);" ng-show="status=='SUCCESS'">
+                <p><b>File processed successfully </b></p>
+            </div>
+            <div>
+                <table>
+                    <thead>
+                    <tr>
+                        <th colspan="8" style="text-align: right;'">
+                            <button style="padding: 0" ng-click="exportExcel()" title="Export to Excel">
+                                <img width="32px" height="32px" src="images/excel_icon.png">
+                            </button>
+                        </th>
+                    </tr>
+                    </thead>
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>First Name</th>
+                        <th>Last Name</th>
+                        <th>Birth Year</th>
+                        <th>Debut Year</th>
+                        <th>Position</th>
+                        <th>Birth Date</th>
+                        <th>Another Date</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="player in players">
+                        <td><b>{{ player.id }}</b></td>
+                        <td><b>{{ player.firstName }}</b></td>
+                        <td><b>{{ player.lastName }}</b></td>
+                        <td><b>{{ player.birthYear }}</b></td>
+                        <td><b>{{ player.debutYear }}</b></td>
+                        <td><b>{{ player.position }}</b></td>
+                        <td><b>{{ player.birthDate }}</b></td>
+                        <td><b>{{ getDate(player.anotherDate) }}</b></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -19,6 +19,17 @@
         <poi.version>3.9</poi.version>
     </properties>
 
+    <repositories>
+        <repository>
+            <id>spring-batch-excel-mvn-repo</id>
+            <url>https://raw.githubusercontent.com/sackmesser/spring-batch-excel/mvn-repo</url>
+            <snapshots>
+                <enabled>true</enabled>
+                <updatePolicy>always</updatePolicy>
+            </snapshots>
+        </repository>
+    </repositories>
+
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>

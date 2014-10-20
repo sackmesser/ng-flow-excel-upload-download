@@ -13,5 +13,5 @@ import java.util.List;
  * Time: 10:39
  */
 public interface IFileDownloadService {
-    byte[] writeToFile(List<Object> objects) throws IllegalAccessException, IOException;
+    byte[] writeToFile(List<Object> objects) throws Exception;
 }

@@ -4,7 +4,6 @@ import com.sackmesser.excel.domain.ResultObject;
 import com.sackmesser.excel.exceptions.NoDataFoundException;
 import com.sackmesser.excel.service.IFileDownloadService;
 import com.sackmesser.excel.service.IFileUploadService;
-import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -12,8 +11,6 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -64,7 +61,7 @@ public abstract class ExcelAbstractController {
     // TODO think another way to send filters as parameters, maybe create a bean or use a map for this
     @RequestMapping(value = "/excel/download", method = RequestMethod.POST,
             produces = MediaType.APPLICATION_OCTET_STREAM_VALUE )
-    @ResponseBody public HttpEntity<byte[]> export () throws IOException, IllegalAccessException {
+    @ResponseBody public HttpEntity<byte[]> export () throws Exception {
         Map filter = new HashMap();
         List<Object> dataToSave = filterDataToDownload(filter);
         if(!CollectionUtils.isEmpty(dataToSave)){
